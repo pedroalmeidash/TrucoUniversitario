@@ -15,15 +15,16 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		Scanner teclado = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		
 		System.out.print("Digite seu nome: ");
-		String nome = teclado.nextLine();
+		String nome = scanner.nextLine();
 		
 		System.out.print("Digite a quantindade de jogadores  > 4 < 8: ");
 		int qtdJogadores = 0;
 		do{
-			qtdJogadores = teclado.nextInt();
+			while(!scanner.hasNextInt()) scanner.next();
+			qtdJogadores = scanner.nextInt();
 		}while(qtdJogadores < 4|| qtdJogadores > 8);
 		
 		Jogador j = new Humano(nome);
@@ -33,7 +34,7 @@ public class Main {
 			m.addJogador(new CPUNormal("Renato"+ x,m));
 		}
 		
-		teclado.nextLine();
+		scanner.nextLine();
 		do{
 			 System.out.println("------------------------------------------");
 		    System.out.println("Partida "+(m.getPartidas()+1));
@@ -54,11 +55,12 @@ public class Main {
 		    
 			for(Jogador jPontos = m.nextJogadoresVida(); jPontos != null; jPontos = m.nextJogadoresVida()){
 			if(m.getPartidas() == 0){
-				if(jPontos instanceof Humano){
-		    			System.out.println("Faz ou n�o?");
-		    			int pendente = teclado.nextInt();
-		    			teclado.nextLine();
-		    			jPontos.setPontosPendente((pendente != 0) ? 1 : 0);
+				if(jPontos instanceof Humano){						
+					//System.out.println("Deseja ir? ('sim' ou 'não')");
+					System.out.println("Faz ou não?");
+					while(!scanner.hasNextInt()) scanner.next();
+					int pendente = scanner.nextInt();
+					jPontos.setPontosPendente((pendente != 0) ? 1 : 0);
 				}
 				else{
 					CPU cpu = (CPU)jPontos;
@@ -72,8 +74,9 @@ public class Main {
 		    			System.out.print(c.toString()+", ");
 		    		
 		    		System.out.println("\nFaz quanto?");
-	    			int pendente = teclado.nextInt();
-	    			teclado.nextLine();
+					while(!scanner.hasNextInt()) scanner.next();
+	    			int pendente = scanner.nextInt();
+	    			scanner.nextLine();
 	    			jPontos.setPontosPendente(pendente);
 		    	  }	else{
 		    		  	CPU cpu = (CPU)jPontos;
@@ -108,8 +111,9 @@ public class Main {
 			    			System.out.print(c.toString()+", ");
 			    		
 			    		System.out.println("\nqual carta jogar?");
-		    			int carta = teclado.nextInt();
-		    			teclado.nextLine();
+						while(!scanner.hasNextInt()) scanner.next();
+		    			int carta = scanner.nextInt();
+		    			scanner.nextLine();
 		    		    m.getForcaDasCartas().CartaJogada(hum, hum.jogar(carta));
 					}else{
 						  CPU cpu = (CPU)jogador;
@@ -139,6 +143,7 @@ public class Main {
 		}while(m.fimDoJogo());
 		
 		System.out.println("Jogador Venceu: "+m.getGanhador().getNome());
+		scanner.close();
 	}
 	
 }
