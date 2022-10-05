@@ -55,17 +55,21 @@ public class Main {
 		    
 			for(Jogador jPontos = m.nextJogadoresVida(); jPontos != null; jPontos = m.nextJogadoresVida()){
 			if(m.getPartidas() == 0){
-				if(jPontos instanceof Humano){						
-					//System.out.println("Deseja ir? ('sim' ou 'não')");
-					System.out.println("Faz ou não?");
-					while(!scanner.hasNextInt()) scanner.next();
-					int pendente = scanner.nextInt();
-					jPontos.setPontosPendente((pendente != 0) ? 1 : 0);
-				}
-				else{
-					CPU cpu = (CPU)jPontos;
-					cpu.escolherPontosPendentes(2);
-					System.out.println("Jogador "+ jPontos.getNome()+ " falou "+ jPontos.getPontosPendente()+" Carta: "+jPontos.getMao().get(0).toString());
+				if(jPontos instanceof Humano){
+					Boolean validador = false;
+					String resposta = "";						
+					System.out.println("Deseja ir? ('sim' ou 'nao')");
+					while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
+						while(!scanner.hasNextLine()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
+						resposta = scanner.nextLine();
+						System.out.println(resposta);
+						if((resposta.equals("sim") || resposta.equals("nao"))){
+							validador = true;
+							jPontos.setPontosPendente((resposta == "sim") ? 1 : 0); //caso faz entao pendente ira receber +1
+						}else{
+							System.out.println("Resposta invalida, Deseja ir? ('sim' ou 'nao')");
+						}
+					} 
 				}
 		    }else{
 		    	if(jPontos.getNome().equals(nome)){
