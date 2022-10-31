@@ -7,6 +7,7 @@ import jun.truco.model.Carta;
 import jun.truco.model.Humano;
 import jun.truco.model.Jogador;
 import jun.truco.model.Mesa;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -28,8 +29,17 @@ public class Main {
 		Jogador j = new Humano(nome);
 		
 		Mesa m = new Mesa(j);
+		ArrayList<String> jogadores = new ArrayList<String>();
+		jogadores.add("Osvaldo");
+		jogadores.add("Mario");
+		jogadores.add("Alberto");
+		jogadores.add("Renato");
+		jogadores.add("Leticia");
+		jogadores.add("Samuel");
+		jogadores.add("Lorenzo");
+
 		for(int x = 1; x < qtdJogadores; x++){
-			m.addJogador(new CPUNormal("Renato"+ x,m));
+			m.addJogador(new CPUNormal(jogadores.get(x),m));
 		}
 		
 		scanner.nextLine();
