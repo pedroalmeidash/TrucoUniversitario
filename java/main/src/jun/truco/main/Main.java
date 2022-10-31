@@ -1,6 +1,4 @@
 package jun.truco.main;
-
-
 import java.util.Scanner;
 import jun.truco.model.Baralho;
 import jun.truco.model.CPU;
@@ -41,7 +39,7 @@ public class Main {
 		   
 			Baralho b = new Baralho();
 			
-			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai embalharar!");
+			//System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai embalharar!");
 			m.getJogadorDaVez().embaralhar(b);
 			
 			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai dar as cartas!");
@@ -51,41 +49,52 @@ public class Main {
 			m.getJogadorDaVez().embaralhar(b);
 			m.vira(b.DarCarta());
 		
-			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" Virou "+m.getManilha() +" de manilha");
+			System.out.println("Manilha: "+m.getManilha());
 		    
-			for(Jogador jPontos = m.nextJogadoresVida(); jPontos != null; jPontos = m.nextJogadoresVida()){
+			for(Jogador jogador = m.nextJogadoresVida(); jogador != null; jogador = m.nextJogadoresVida()){
 			if(m.getPartidas() == 0){
-				if(jPontos instanceof Humano){
+				if(jogador instanceof Humano){
 					Boolean validador = false;
 					String resposta = "";						
 					System.out.println("Deseja ir? ('sim' ou 'nao')");
 					while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
 						while(!scanner.hasNextLine()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
 						resposta = scanner.nextLine();
-						System.out.println(resposta);
 						if((resposta.equals("sim") || resposta.equals("nao"))){
 							validador = true;
-							jPontos.setPontosPendente((resposta == "sim") ? 1 : 0); //caso faz entao pendente ira receber +1
+							jogador.setPontosPendente((resposta == "sim") ? 1 : 0); //caso faz entao pendente ira receber +1
 						}else{
 							System.out.println("Resposta invalida, Deseja ir? ('sim' ou 'nao')");
 						}
 					} 
 				}
 		    }else{
-		    	if(jPontos.getNome().equals(nome)){
+		    	if(jogador.getNome().equals(nome)){
 		    		System.out.print("Mao: ");
-		    		for(Carta c : jPontos.getMao())
+		    		for(Carta c : jogador.getMao())
 		    			System.out.print(c.toString()+", ");
-		    		
-		    		System.out.println("\nFaz quanto?");
-					while(!scanner.hasNextInt()) scanner.next();
-	    			int pendente = scanner.nextInt();
-	    			scanner.nextLine();
-	    			jPontos.setPontosPendente(pendente);
+
+
+
+
+						Boolean validador = false;
+						System.out.println("\nFaz quanto?");
+						while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
+							int qtd = jogador.getMao().size();
+							while(!scanner.hasNextInt()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
+							Integer resposta = scanner.nextInt();
+							if(resposta < qtd){
+								validador = true;
+								jogador.setPontosPendente(resposta);
+							}else{
+								qtd = qtd -1;
+								System.out.println("Resposta invalida invalida informe um numero de 0 a "+ qtd);
+							}
+						}
 		    	  }	else{
-		    		  	CPU cpu = (CPU)jPontos;
+		    		  	CPU cpu = (CPU)jogador;
 		    		  	cpu.escolherPontosPendentes(m.getNumerosCartas());
-						System.out.println("jogador: "+jPontos.getNome()+ " Faz: "+jPontos.getPontosPendente());
+						System.out.println("jogador: "+jogador.getNome()+ " Faz: "+jogador.getPontosPendente());
 		    		}
 		    	}
 		    		
@@ -107,18 +116,29 @@ public class Main {
 					
 					while(m.getTurno().hasnext()){
 					Jogador jogador = m.getTurno().next();
-					
+
 					if(jogador instanceof Humano){
-						Humano hum = (Humano)jogador;
+						Humano hum = (Humano)jogador;						
 						System.out.print("Mao: ");
 			    		for(Carta c : jogador.getMao())
 			    			System.out.print(c.toString()+", ");
 			    		
-			    		System.out.println("\nqual carta jogar?");
-						while(!scanner.hasNextInt()) scanner.next();
-		    			int carta = scanner.nextInt();
-		    			scanner.nextLine();
-		    		    m.getForcaDasCartas().CartaJogada(hum, hum.jogar(carta));
+
+
+						Boolean validador = false;
+						System.out.println("qual carta jogar?");
+						while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
+							int qtd = jogador.getMao().size();
+							while(!scanner.hasNextInt()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
+							Integer resposta = scanner.nextInt();
+							if(resposta < qtd){
+								validador = true;
+								m.getForcaDasCartas().CartaJogada(hum, hum.jogar(resposta));
+							}else{
+								qtd = qtd -1;
+								System.out.println("Resposta invalida invalida informe um numero de 0 a "+ qtd);
+							}
+						}
 					}else{
 						  CPU cpu = (CPU)jogador;
 						  Carta c = cpu.Jogar();
