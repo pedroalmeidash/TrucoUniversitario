@@ -2,47 +2,28 @@ package jun.truco.main;
 import java.util.Scanner;
 import jun.truco.model.Baralho;
 import jun.truco.model.CPU;
-import jun.truco.model.CPUNormal;
+
 import jun.truco.model.Carta;
 import jun.truco.model.Humano;
 import jun.truco.model.Jogador;
+import jun.truco.model.Lerteclado;
 import jun.truco.model.Mesa;
-import jun.truco.service.Partida;
-
-import java.util.ArrayList;
+import jun.truco.model.Outrosjogadores;
 
 public class Main {	
 	public static void main(String[] args) {
-		
 		Scanner scanner = new Scanner(System.in);
+		Lerteclado teclado = new Lerteclado();
 		
 		System.out.print("Digite seu nome: ");
 		String nome = scanner.nextLine();
-		
-		System.out.print("Digite a quantindade de jogadores de 4 a 8");
-		int qtdJogadores = 0;
-		do{
-			while(!scanner.hasNextInt()) scanner.next();
-			qtdJogadores = scanner.nextInt();
-		}while(qtdJogadores < 4 || qtdJogadores > 8);
-		
-		Jogador j = new Humano(nome);
-		
-		Mesa m = new Mesa(j);
-		ArrayList<String> jogadores = new ArrayList<String>();
-		jogadores.add("Osvaldo");
-		jogadores.add("Mario");
-		jogadores.add("Alberto");
-		jogadores.add("Renato");
-		jogadores.add("Leticia");
-		jogadores.add("Samuel");
-		jogadores.add("Lorenzo");
 
-		for(int x = 1; x < qtdJogadores; x++){
-			m.addJogador(new CPUNormal(jogadores.get(x),m));
-		}
-		
-		scanner.nextLine();
+		Jogador j = new Humano(nome);
+		Mesa m = new Mesa(j);
+
+		Outrosjogadores outros = new Outrosjogadores();
+		outros.primeira_rodada(m, scanner);
+				
 		do{
 			System.out.println("------------------------------------------");
 		    System.out.println("Partida "+(m.getPartidas()+1));
@@ -64,36 +45,23 @@ public class Main {
 			for(Jogador jogador = m.nextJogadoresVida(); jogador != null; jogador = m.nextJogadoresVida()){
 			if(m.getPartidas() == 0){
 				if(jogador instanceof Humano){
-					Partida partida = new Partida();
-					partida.primeira_rodada(jogador);
+					teclado.primeira_rodada(jogador, scanner);
 				}
 		    }else{
 		    	if(jogador.getNome().equals(nome)){
 		    		System.out.print("Mao: ");
-		    		for(Carta c : jogador.getMao())
+		    		
+						for(Carta c : jogador.getMao())
 		    			System.out.print(c.toString()+", ");
+							
+							teclado.fazquantos(jogador, scanner);
 
-						Boolean validador = false;
-						System.out.println("\nFaz quanto?");
-						while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
-							int qtd = jogador.getMao().size();
-							while(!scanner.hasNextInt()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
-							Integer resposta = scanner.nextInt();
-							if(resposta <= qtd){
-								validador = true;
-								jogador.setPontosPendente(resposta);
-							}else{
-								System.out.println("Resposta invalida informe um numero de 0 a "+ qtd);
-							}
-						}
-		    	  }	else{
+		    		}	else{
 		    		  	CPU cpu = (CPU)jogador;
 		    		  	cpu.escolherPontosPendentes(m.getNumerosCartas());
 						System.out.println("jogador: "+jogador.getNome()+ " Faz: "+jogador.getPontosPendente());
 		    		}
 		    	}
-		    		
-		    	
 			}
 			m.ComecarPartida();
 				while(m.hasRodada()){
@@ -117,26 +85,14 @@ public class Main {
 						System.out.print("Mesa: ");
 						for(int x = 0; x < m.getMesa().length && m.getMesa()[x] != null;x++)System.out.print(m.getMesa()[x].toString()+", ");
 						System.out.println("");
-
-
-						Humano hum = (Humano)jogador;						
+										
 						System.out.print("Mao: ");
 			    		for(Carta c : jogador.getMao())
 			    			System.out.print(c.toString()+", ");
 
-						Boolean validador = false;
-						System.out.println("qual carta jogar?");
-						while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
-							int qtd = jogador.getMao().size();
-							while(!scanner.hasNextInt()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
-							Integer resposta = scanner.nextInt();
-							if(resposta <= qtd){
-								validador = true;
-								m.getForcaDasCartas().CartaJogada(hum, hum.jogar(resposta));
-							}else{
-								System.out.println("Resposta invalida informe um numero de 0 a "+ qtd);
-							}
-						}
+							teclado.escolher_cartajogar(m, scanner, jogador);
+
+						
 					}else{
 						  CPU cpu = (CPU)jogador;
 						  Carta c = cpu.Jogar();
