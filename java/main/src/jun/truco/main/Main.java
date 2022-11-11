@@ -7,11 +7,11 @@ import jun.truco.model.Carta;
 import jun.truco.model.Humano;
 import jun.truco.model.Jogador;
 import jun.truco.model.Mesa;
+import jun.truco.service.Partida;
+
 import java.util.ArrayList;
 
-public class Main {
-
-	
+public class Main {	
 	public static void main(String[] args) {
 		
 		Scanner scanner = new Scanner(System.in);
@@ -19,12 +19,12 @@ public class Main {
 		System.out.print("Digite seu nome: ");
 		String nome = scanner.nextLine();
 		
-		System.out.print("Digite a quantindade de jogadores  > 4 < 8: ");
+		System.out.print("Digite a quantindade de jogadores de 4 a 8");
 		int qtdJogadores = 0;
 		do{
 			while(!scanner.hasNextInt()) scanner.next();
 			qtdJogadores = scanner.nextInt();
-		}while(qtdJogadores < 4|| qtdJogadores > 8);
+		}while(qtdJogadores < 4 || qtdJogadores > 8);
 		
 		Jogador j = new Humano(nome);
 		
@@ -44,7 +44,7 @@ public class Main {
 		
 		scanner.nextLine();
 		do{
-			 System.out.println("------------------------------------------");
+			System.out.println("------------------------------------------");
 		    System.out.println("Partida "+(m.getPartidas()+1));
 		   
 			Baralho b = new Baralho();
@@ -64,19 +64,8 @@ public class Main {
 			for(Jogador jogador = m.nextJogadoresVida(); jogador != null; jogador = m.nextJogadoresVida()){
 			if(m.getPartidas() == 0){
 				if(jogador instanceof Humano){
-					Boolean validador = false;
-					String resposta = "";						
-					System.out.println("Deseja ir? ('sim' ou 'nao')");
-					while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
-						while(!scanner.hasNextLine()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
-						resposta = scanner.nextLine();
-						if((resposta.equals("sim") || resposta.equals("nao"))){
-							validador = true;
-							jogador.setPontosPendente((resposta == "sim") ? 1 : 0); //caso faz entao pendente ira receber +1
-						}else{
-							System.out.println("Resposta invalida, Deseja ir? ('sim' ou 'nao')");
-						}
-					} 
+					Partida partida = new Partida();
+					partida.primeira_rodada(jogador);
 				}
 		    }else{
 		    	if(jogador.getNome().equals(nome)){
@@ -84,21 +73,17 @@ public class Main {
 		    		for(Carta c : jogador.getMao())
 		    			System.out.print(c.toString()+", ");
 
-
-
-
 						Boolean validador = false;
 						System.out.println("\nFaz quanto?");
 						while(!validador){ //faz while ate que resposta informada seja uma das 2 seguintes "sim" ou "nao"
 							int qtd = jogador.getMao().size();
 							while(!scanner.hasNextInt()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
 							Integer resposta = scanner.nextInt();
-							if(resposta < qtd){
+							if(resposta <= qtd){
 								validador = true;
 								jogador.setPontosPendente(resposta);
 							}else{
-								qtd = qtd -1;
-								System.out.println("Resposta invalida invalida informe um numero de 0 a "+ qtd);
+								System.out.println("Resposta invalida informe um numero de 0 a "+ qtd);
 							}
 						}
 		    	  }	else{
@@ -128,12 +113,16 @@ public class Main {
 					Jogador jogador = m.getTurno().next();
 
 					if(jogador instanceof Humano){
+
+						System.out.print("Mesa: ");
+						for(int x = 0; x < m.getMesa().length && m.getMesa()[x] != null;x++)System.out.print(m.getMesa()[x].toString()+", ");
+						System.out.println("");
+
+
 						Humano hum = (Humano)jogador;						
 						System.out.print("Mao: ");
 			    		for(Carta c : jogador.getMao())
 			    			System.out.print(c.toString()+", ");
-			    		
-
 
 						Boolean validador = false;
 						System.out.println("qual carta jogar?");
@@ -141,12 +130,11 @@ public class Main {
 							int qtd = jogador.getMao().size();
 							while(!scanner.hasNextInt()) scanner.next(); //so ira fazer as demais validacoes caso seja um string
 							Integer resposta = scanner.nextInt();
-							if(resposta < qtd){
+							if(resposta <= qtd){
 								validador = true;
 								m.getForcaDasCartas().CartaJogada(hum, hum.jogar(resposta));
 							}else{
-								qtd = qtd -1;
-								System.out.println("Resposta invalida invalida informe um numero de 0 a "+ qtd);
+								System.out.println("Resposta invalida informe um numero de 0 a "+ qtd);
 							}
 						}
 					}else{
@@ -154,17 +142,12 @@ public class Main {
 						  Carta c = cpu.Jogar();
 						  System.out.println("Jogador: " + jogador.getNome()+" jogou "+c.toString());
 						  m.getForcaDasCartas().CartaJogada(cpu, c);
-					}
-					
-					
-					System.out.print("Mesa: ");
-					for(int x = 0; x < m.getMesa().length && m.getMesa()[x] != null;x++)System.out.print(m.getMesa()[x].toString()+", ");
-					System.out.println("");
+					}					
 				 }
 					System.out.println("*********************************");
 					if(m.getForcaDasCartas().getJogadorFez() == null)System.out.println("Empachado");
-					else System.out.println("Jogador ganhou o turno: "+m.getForcaDasCartas().getJogadorFez().getNome());
-					
+					else System.out.println("Jogador " +m.getForcaDasCartas().getJogadorFez().getNome()+ " ganhou o turno");
+
 					m.limpaMesa();
 				}
 				System.out.println("------------------------------------------");
