@@ -6,7 +6,7 @@ public class Outrosjogadores {
     public void primeira_rodada(Mesa m, Scanner scanner){    
 
         
-		System.out.print("Digite a quantindade de jogadores de 4 a 8");
+		System.out.print("Digite a quantindade de jogadores de 4 a 8: ");
 		int qtdJogadores = 0;
 		do{
 			while(!scanner.hasNextInt()) scanner.next();

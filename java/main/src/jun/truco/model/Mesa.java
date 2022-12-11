@@ -81,9 +81,15 @@ public class Mesa {
 			
 			if(todosOsPontos == numerosCartas)
 				return 	turno.getJogador()[turno.getJogador().length-1];
-			else return null;
+			else 
+				return null;
 		}
 	}
+
+	public Integer qtd_jogador(){
+		return turno.getJogador().length;
+	}
+
 	public void vira(Carta c){
 		int valor = c.getValor();
 		if(valor < 0 || valor > 9)throw new ArrayIndexOutOfBoundsException();

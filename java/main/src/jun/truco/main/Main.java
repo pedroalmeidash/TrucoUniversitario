@@ -1,4 +1,5 @@
 package jun.truco.main;
+import java.sql.Array;
 import java.util.Scanner;
 import jun.truco.model.Baralho;
 import jun.truco.model.CPU;
@@ -39,27 +40,31 @@ public class Main {
 		
 			System.out.println("Manilha: "+m.getManilha());
 		    
-			for(Jogador jogador = m.nextJogadoresVida(); jogador != null; jogador = m.nextJogadoresVida()){
-			if(m.getPartidas() == 0){
-				if(jogador instanceof Humano){
-					teclado.primeira_rodada(jogador, scanner);
-				}
-		    }else{
-		    	if(jogador.getNome().equals(nome)){
-		    		System.out.print("Mao: ");
-		    		
-						for(Carta c : jogador.getMao())
-		    			System.out.print(c.toString()+", ");
-							
-							teclado.fazquantos(jogador, scanner);
+			int qtdJogadores = m.qtd_jogador();
+			for(int x = 0; x < qtdJogadores; x++){
+				Jogador jogador = m.nextJogadoresVida();
 
-		    		}	else{
-		    		  	CPU cpu = (CPU)jogador;
-		    		  	cpu.escolherPontosPendentes(m.getNumerosCartas());
-						System.out.println("jogador: "+jogador.getNome()+ " Faz: "+jogador.getPontosPendente());
-		    		}
-		    	}
-			}
+				System.out.println(jogador);
+				if(m.getPartidas() == 0){
+						if(jogador instanceof Humano){
+							teclado.primeira_rodada(jogador, scanner);
+						}
+					}else{
+						if(jogador.getNome().equals(nome)){
+							System.out.print("Mao: ");
+							
+							for(Carta c : jogador.getMao())
+								System.out.print(c.toString()+", ");
+								
+								teclado.fazquantos(jogador, scanner);
+
+							}	else{
+									CPU cpu = (CPU)jogador;
+									cpu.escolherPontosPendentes(m.getNumerosCartas());
+							System.out.println("jogador: "+jogador.getNome()+ " Faz: "+jogador.getPontosPendente());
+							}
+						}
+				}
 			m.ComecarPartida();
 				while(m.hasRodada()){
 					System.out.println("*********************************");
