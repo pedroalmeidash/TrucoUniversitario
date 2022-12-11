@@ -2,7 +2,6 @@ package jun.truco.main;
 import java.util.Scanner;
 import jun.truco.model.Baralho;
 import jun.truco.model.CPU;
-
 import jun.truco.model.Carta;
 import jun.truco.model.Humano;
 import jun.truco.model.Jogador;
@@ -29,8 +28,6 @@ public class Main {
 		    System.out.println("Partida "+(m.getPartidas()+1));
 		   
 			Baralho b = new Baralho();
-			
-			//System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai embalharar!");
 			m.getJogadorDaVez().embaralhar(b);
 			
 			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai dar as cartas!");

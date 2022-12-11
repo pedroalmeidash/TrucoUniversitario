@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class Lerteclado {
     public void primeira_rodada(Jogador j, Scanner scanner){
+        
         Boolean validador = false;
         String resposta = "";						
         System.out.println("Deseja ir? ('sim' ou 'nao')");
