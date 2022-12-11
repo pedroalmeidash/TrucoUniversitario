@@ -90,6 +90,10 @@ public class Mesa {
 		return turno.getJogador().length;
 	}
 
+	public void mostrar_todas_cartas(){
+		System.out.println("teste");
+	}
+
 	public void vira(Carta c){
 		int valor = c.getValor();
 		if(valor < 0 || valor > 9)throw new ArrayIndexOutOfBoundsException();
@@ -268,5 +272,16 @@ public class Mesa {
 	}
 
 
+	public void MostraMesa() {
+		System.out.print("Mesa: ");
+		for(int x = 0; x < getMesa().length && getMesa()[x] != null;x++)System.out.print(getMesa()[x].toString()+", ");
+		System.out.println("");
+	}
+
+	public void MostrarMao(Jogador jogador) {
+			System.out.print("Mao: ");							
+			for(Carta c : jogador.getMao())
+			System.out.print(c.toString()+", ");
+	}
 
 }

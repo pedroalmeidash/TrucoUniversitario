@@ -17,8 +17,8 @@ public abstract class Jogador {
 	public Jogador(String nome){
 		this.setNome(nome);
 	}
-	public Carta[] listagem(){
-		return (Carta[]) mao.toArray();
+	public Object listagem(){
+		return mao.toArray();
 	}
 	
 	public void receberCarta(Carta c){

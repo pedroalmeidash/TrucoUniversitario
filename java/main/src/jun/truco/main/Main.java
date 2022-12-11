@@ -1,5 +1,4 @@
 package jun.truco.main;
-import java.sql.Array;
 import java.util.Scanner;
 import jun.truco.model.Baralho;
 import jun.truco.model.CPU;
@@ -43,29 +42,24 @@ public class Main {
 			int qtdJogadores = m.qtd_jogador();
 			for(int x = 0; x < qtdJogadores; x++){
 				Jogador jogador = m.nextJogadoresVida();
-
-				System.out.println(jogador);
 				if(m.getPartidas() == 0){
+						//printar todas as cartas dos outros e a sua
+						//Object teste = jogador.listagem();
 						if(jogador instanceof Humano){
 							teclado.primeira_rodada(jogador, scanner);
 						}
 					}else{
 						if(jogador.getNome().equals(nome)){
-							System.out.print("Mao: ");
-							
-							for(Carta c : jogador.getMao())
-								System.out.print(c.toString()+", ");
-								
-								teclado.fazquantos(jogador, scanner);
-
-							}	else{
-									CPU cpu = (CPU)jogador;
-									cpu.escolherPontosPendentes(m.getNumerosCartas());
+							m.MostrarMao(jogador);					
+							teclado.fazquantos(jogador, scanner);
+						}	else{
+							CPU cpu = (CPU)jogador;
+							cpu.escolherPontosPendentes(m.getNumerosCartas());
 							System.out.println("jogador: "+jogador.getNome()+ " Faz: "+jogador.getPontosPendente());
-							}
 						}
+					}
 				}
-			m.ComecarPartida();
+				m.ComecarPartida();
 				while(m.hasRodada()){
 					System.out.println("*********************************");
 					System.out.println("Rodada: "+m.getRodada()+"/"+m.getRodadasPorPartidas());
@@ -83,16 +77,10 @@ public class Main {
 					Jogador jogador = m.getTurno().next();
 
 					if(jogador instanceof Humano){
-
-						System.out.print("Mesa: ");
-						for(int x = 0; x < m.getMesa().length && m.getMesa()[x] != null;x++)System.out.print(m.getMesa()[x].toString()+", ");
-						System.out.println("");
-										
-						System.out.print("Mao: ");
-			    		for(Carta c : jogador.getMao())
-			    			System.out.print(c.toString()+", ");
-
-							teclado.escolher_cartajogar(m, scanner, jogador);
+						m.MostraMesa();
+						m.MostrarMao(jogador);
+						
+						teclado.escolher_cartajogar(m, scanner, jogador);
 
 						
 					}else{
@@ -113,8 +101,7 @@ public class Main {
 				for(Jogador jo : m.getJogadores()){
 					String caiu = (jo.getVidas()<=0)?" Caiu": "";
 					System.out.println(jo.getNome()+ " Vidas: "+jo.getVidas()+caiu);
-					}
-				
+				}
 		}while(m.fimDoJogo());
 		
 		System.out.println("Jogador Venceu: "+m.getGanhador().getNome());
