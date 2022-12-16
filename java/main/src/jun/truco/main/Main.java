@@ -1,7 +1,6 @@
 package jun.truco.main;
 import java.util.List;
 import java.util.Scanner;
-import jun.truco.model.Baralho;
 import jun.truco.model.CPU;
 import jun.truco.model.Carta;
 import jun.truco.model.Humano;

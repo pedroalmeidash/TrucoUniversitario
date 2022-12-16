@@ -258,11 +258,9 @@ public class Mesa {
 		return j;
 	}
 
-
 	public Turno getTurno() {
 		return turno;
 	}
-
 
 	/**
 	 * @return the forcaDasCartas
@@ -270,7 +268,6 @@ public class Mesa {
 	public ForcaDasCartas getForcaDasCartas() {
 		return forcaDasCartas;
 	}
-
 
 	public void MostraMesa() {
 		System.out.print("Mesa: ");
