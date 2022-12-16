@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public abstract class Jogador {
-	protected String nome;
+	public String nome;
 	protected int vidas = 5;
 	protected int pontos;
 	protected int pontosPendente;
@@ -17,8 +17,8 @@ public abstract class Jogador {
 	public Jogador(String nome){
 		this.setNome(nome);
 	}
-	public Object listagem(){
-		return mao.toArray();
+	public List<Carta> listagem(){
+		return mao;
 	}
 	
 	public void receberCarta(Carta c){

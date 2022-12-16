@@ -3,8 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Outrosjogadores {
-    public void primeira_rodada(Mesa m, Scanner scanner){    
-
+    public void GeraOutrosJogadores(Mesa m, Scanner scanner){
         
 		System.out.print("Digite a quantindade de jogadores de 4 a 8: ");
 		int qtdJogadores = 0;
@@ -23,7 +22,7 @@ public class Outrosjogadores {
 		jogadores.add("Lorenzo");
 
 		for(int x = 0; x < qtdJogadores-1; x++){
-		        m.addJogador(new CPUNormal(jogadores.get(x),m));
+			m.addJogador(new CPUNormal(jogadores.get(x),m));
 		}
 
         scanner.nextLine();

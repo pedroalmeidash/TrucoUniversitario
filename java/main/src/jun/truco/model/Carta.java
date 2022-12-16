@@ -1,5 +1,6 @@
 package jun.truco.model;
 
+import java.util.List;
 
 public class Carta {
 
@@ -47,7 +48,5 @@ public class Carta {
 	
 	public String toString(){
 		return Valor[valor] + " de " + naipe;
-	}
-	
-
+	}		
 }

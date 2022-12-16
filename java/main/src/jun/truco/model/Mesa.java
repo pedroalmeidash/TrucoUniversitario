@@ -284,4 +284,20 @@ public class Mesa {
 			System.out.print(c.toString()+", ");
 	}
 
+	public void prints_nova_rodada(Mesa m){
+		System.out.println("------------------------------------------");
+		  System.out.println("Partida "+(m.getPartidas()+1));
+		   
+			Baralho b = new Baralho();
+			m.getJogadorDaVez().embaralhar(b);
+			
+			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai dar as cartas!");
+			m.DarAsCartas();
+			
+			b = new Baralho();
+			m.getJogadorDaVez().embaralhar(b);
+			m.vira(b.DarCarta());
+		
+			System.out.println("Manilha: "+m.getManilha());
+	}
 }
