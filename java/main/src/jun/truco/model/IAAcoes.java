@@ -50,6 +50,27 @@ public class IAAcoes {
         else return c2;
     }
 
+    public int getPosicaoDaMenorCartaNaMao() {
+        int menorValor = Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(0).getValor()]);
+        int posicao = 0;
+        for (int x = 0; x < jogador.getMao().size(); x++) {
+            if (Carta.Valor[jogador.getMao().get(x).getValor()].equals(m.getManilha())) {
+                if (Carta.Valor[jogador.getMao().get(posicao).getValor()].equals(m.getManilha())) {
+                    if (jogador.getMao().get(x).getNaipe().ordinal() > jogador.getMao().get(posicao).getNaipe().ordinal())
+                        posicao = x;
+                } else {
+                    posicao = x;
+                }
+                menorValor = -1;
+            } else if (menorValor == -1) continue;
+            else if (Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(x).getValor()]) < menorValor) {
+                menorValor = Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(x).getValor()]);
+                posicao = x;
+            }
+        }
+        return posicao;
+    }
+
     public int getPosicaoDaMaiorCartaNaMao() {
         int maiorValor = Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(0).getValor()]);
         int posicao = 0;
@@ -59,7 +80,6 @@ public class IAAcoes {
                     if (jogador.getMao().get(x).getNaipe().ordinal() < jogador.getMao().get(posicao).getNaipe().ordinal())
                         posicao = x;
                 } else {
-
                     posicao = x;
                 }
                 maiorValor = -1;
@@ -79,28 +99,6 @@ public class IAAcoes {
             mesa += Carta.Valor[m.getMesa()[a].getValor()];
 
         return mesa.contains(Carta.Valor[c.getValor()]);
-    }
-
-    public int getPosicaoDaMenorCartaNaMao() {
-        int menorValor = Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(0).getValor()]);
-        int posicao = 0;
-        for (int x = 0; x < jogador.getMao().size(); x++) {
-            if (Carta.Valor[jogador.getMao().get(x).getValor()].equals(m.getManilha())) {
-                if (Carta.Valor[jogador.getMao().get(posicao).getValor()].equals(m.getManilha())) {
-                    if (jogador.getMao().get(x).getNaipe().ordinal() > jogador.getMao().get(posicao).getNaipe().ordinal())
-                        posicao = x;
-                } else {
-
-                    posicao = x;
-                }
-                menorValor = -1;
-            } else if (menorValor == -1) continue;
-            else if (Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(x).getValor()]) < menorValor) {
-                menorValor = Baralho.valorDasCartas.indexOf(Carta.Valor[jogador.getMao().get(x).getValor()]);
-                posicao = x;
-            }
-        }
-        return posicao;
     }
 
 }

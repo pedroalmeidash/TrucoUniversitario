@@ -293,9 +293,10 @@ public class Mesa {
     public void MostrarMao(Jogador jogador) {
         System.out.print("Mao: ");
         for (Carta c : jogador.getMao()) System.out.print(c.toString() + ", ");
-        System.out.println();
+        System.out.println("");
         Carta[] mao = jogador.getMao().toArray(new Carta[0]);
         CartaASCII.exibirCartas(mao);
+        System.out.println("");
     }
 
     public void prints_nova_rodada(Mesa m) {
