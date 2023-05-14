@@ -237,5 +237,4 @@ public class CPUNormal extends CPU {
 
         return maior;
     }
-
 }

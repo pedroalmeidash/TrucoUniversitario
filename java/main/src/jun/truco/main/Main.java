@@ -37,8 +37,8 @@ public class Main {
                         teclado.primeira_rodada(jogador, scanner);
                     } else {
                         System.out.println(jogador.nome + " tem a carta: " + carta);
-//                        Carta[] c = {carta};
-//                        CartaASCII.exibirCartas(c);
+                        //Carta[] c = {carta};
+                        //CartaASCII.exibirCartas(c);
                     }
                 } else {
                     if (jogador.getNome().equals(nome)) {
@@ -78,8 +78,8 @@ public class Main {
                         CPU cpu = (CPU) jogador;
                         Carta c = cpu.Jogar();
                         System.out.println("Jogador: " + jogador.getNome() + " jogou " + c.toString());
-//                        Carta[] carta = {c};
-//                        CartaASCII.exibirCartas(carta);
+                        //Carta[] carta = {c};
+                        //CartaASCII.exibirCartas(carta);
                         m.getForcaDasCartas().CartaJogada(cpu, c);
                     }
                 }

@@ -10,5 +10,4 @@ public abstract class CPU extends Jogador {
     public abstract Carta Jogar();
 
     public abstract int escolherPontosPendentes(int limiteDeCartas);
-
 }

@@ -2,7 +2,6 @@ package jun.truco.model;
 
 public class ForcaDasCartas {
 
-
     private Carta[] mesa;
     private String valoresEmpachado = "";
     private Jogador[] MapeamentoJogadores;
@@ -137,5 +136,4 @@ public class ForcaDasCartas {
         }
         DeterminarMaiorCarta();
     }
-
 }

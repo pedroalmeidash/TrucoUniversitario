@@ -11,5 +11,4 @@ public class Humano extends Jogador {
         if (posicao < 0 || posicao > mao.size()) throw new ArrayIndexOutOfBoundsException();
         return mao.remove(posicao);
     }
-
 }

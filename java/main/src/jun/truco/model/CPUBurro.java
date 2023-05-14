@@ -30,5 +30,4 @@ public class CPUBurro extends CPU {
         setPontosPendente(pendente);
         return pendente;
     }
-
 }

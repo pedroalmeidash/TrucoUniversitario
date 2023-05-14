@@ -100,5 +100,4 @@ public class IAAcoes {
 
         return mesa.contains(Carta.Valor[c.getValor()]);
     }
-
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Mesa {
 
-
     private int manilha;
     private Carta[] mesa;
     private int numerosCartas = 1;

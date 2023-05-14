@@ -73,5 +73,4 @@ public abstract class Jogador {
         this.pontosPendente = pontosPendente;
     }
 
-
 }

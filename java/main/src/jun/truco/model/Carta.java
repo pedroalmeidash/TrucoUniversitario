@@ -1,55 +1,53 @@
 package jun.truco.model;
 
-import java.util.List;
 
 public class Carta {
 
-    public static enum Naipe {Paus, Ouros, Espadas, Copas}
+	public static enum Naipe {Paus, Ouros, Espadas, Copas}
 
-    ;
-    public static String Valor[] = {"A", "2", "3", "4", "5", "6", "7", "Q", "J", "K"};
-    private int valor;
+	public static String Valor[] = {"A", "2", "3", "4", "5", "6", "7", "Q", "J", "K"};
+	private int valor;
 
-    private Naipe naipe;
+	private Naipe naipe;
 
 
-    public Carta(int valor, Naipe naipe) {
-        setValor(valor);
-        setNaipe(naipe);
-    }
+	public Carta(int valor, Naipe naipe) {
+		setValor(valor);
+		setNaipe(naipe);
+	}
 
-    /**
-     * @return the valor
-     */
-    public int getValor() {
-        return valor;
-    }
+	/**
+	 * @return the valor
+	 */
+	public int getValor() {
+		return valor;
+	}
 
-    /**
-     * @param valor the valor to set
-     */
-    public void setValor(int valor) {
-        if (valor < 0 || valor > 9) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        this.valor = valor;
-    }
+	/**
+	 * @param valor the valor to set
+	 */
+	public void setValor(int valor) {
+		if (valor < 0 || valor > 9) {
+			throw new ArrayIndexOutOfBoundsException();
+		}
+		this.valor = valor;
+	}
 
-    /**
-     * @return the naipe
-     */
-    public Naipe getNaipe() {
-        return naipe;
-    }
+	/**
+	 * @return the naipe
+	 */
+	public Naipe getNaipe() {
+		return naipe;
+	}
 
-    /**
-     * @param naipe the naipe to set
-     */
-    protected void setNaipe(Naipe naipe) {
-        this.naipe = naipe;
-    }
+	/**
+	 * @param naipe the naipe to set
+	 */
+	protected void setNaipe(Naipe naipe) {
+		this.naipe = naipe;
+	}
 
-    public String toString() {
-        return Valor[valor] + " de " + naipe;
-    }
+	public String toString() {
+		return Valor[valor] + " de " + naipe;
+	}
 }
