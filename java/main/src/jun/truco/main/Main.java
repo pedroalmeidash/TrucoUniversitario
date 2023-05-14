@@ -1,144 +1,112 @@
 package jun.truco.main;
 
-
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Scanner;
-import jun.truco.model.Baralho;
-import jun.truco.model.CPU;
-import jun.truco.model.CPUNormal;
-import jun.truco.model.Carta;
-import jun.truco.model.Humano;
-import jun.truco.model.Jogador;
-import jun.truco.model.Mesa;
+
+import jun.truco.model.*;
 
 public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean isGameOnLoop = true;
+        Lerteclado teclado = new Lerteclado();
 
-	
-	public static void main(String[] args) {
-		
-		Scanner teclado = new Scanner(System.in);
-		
-		System.out.print("Digite seu nome: ");
-		String nome = teclado.nextLine();
-		
-		System.out.print("Digite a quantindade de jogadores  > 4 < 8: ");
-		int qtdJogadores = 0;
-		do{
-			qtdJogadores = teclado.nextInt();
-		}while(qtdJogadores < 4|| qtdJogadores > 8);
-		
-		Jogador j = new Humano(nome);
-		
-		Mesa m = new Mesa(j);
-		for(int x = 1; x < qtdJogadores; x++){
-			m.addJogador(new CPUNormal("Renato"+ x,m));
-		}
-		
-		teclado.nextLine();
-		do{
-			 System.out.println("------------------------------------------");
-		    System.out.println("Partida "+(m.getPartidas()+1));
-		   
-			Baralho b = new Baralho();
-			
-			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai embalharar!");
-			m.getJogadorDaVez().embaralhar(b);
-			
-			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" vai dar as cartas!");
-			m.DarAsCartas();
-			
-			b = new Baralho();
-			m.getJogadorDaVez().embaralhar(b);
-			m.vira(b.DarCarta());
-		
-			System.out.println("Jogador "+m.getJogadorDaVez().getNome()+" Virou "+m.getManilha() +" de manilha");
-		    
-			for(Jogador jPontos = m.nextJogadoresVida(); jPontos != null; jPontos = m.nextJogadoresVida()){
-			if(m.getPartidas() == 0){
-				if(jPontos instanceof Humano){
-		    			System.out.println("Faz ou n�o?");
-		    			int pendente = teclado.nextInt();
-		    			teclado.nextLine();
-		    			jPontos.setPontosPendente((pendente != 0) ? 1 : 0);
-				}
-				else{
-					CPU cpu = (CPU)jPontos;
-					cpu.escolherPontosPendentes(2);
-					System.out.println("Jogador "+ jPontos.getNome()+ " falou "+ jPontos.getPontosPendente()+" Carta: "+jPontos.getMao().get(0).toString());
-				}
-		    }else{
-		    	if(jPontos.getNome().equals(nome)){
-		    		System.out.print("Mao: ");
-		    		for(Carta c : jPontos.getMao())
-		    			System.out.print(c.toString()+", ");
-		    		
-		    		System.out.println("\nFaz quanto?");
-	    			int pendente = teclado.nextInt();
-	    			teclado.nextLine();
-	    			jPontos.setPontosPendente(pendente);
-		    	  }	else{
-		    		  	CPU cpu = (CPU)jPontos;
-		    		  	cpu.escolherPontosPendentes(m.getNumerosCartas());
-						System.out.println("jogador: "+jPontos.getNome()+ " Faz: "+jPontos.getPontosPendente());
-		    		}
-		    	}
-		    		
-		    	
-			}
-			m.ComecarPartida();
-				while(m.hasRodada()){
-					System.out.println("*********************************");
-					System.out.println("Rodada: "+m.getRodada()+"/"+m.getRodadasPorPartidas());
-					
-					System.out.println("\nJogadores Pontos:");
-					int pontosTotalMesa = 0, pontosTotalPrecisaMesa = 0;
-					for(Jogador jo : m.getJogadores()){
-						pontosTotalMesa += jo.getPontos();
-						pontosTotalPrecisaMesa += jo.getPontosPendente();
-						System.out.println(jo.getNome()+ " Pontos Feito: "+jo.getPontos()+ " Precisa fazer: "+ jo.getPontosPendente());
-					}
-					System.out.println("Total de pontos da mesa: "+pontosTotalMesa+" Total de pontos pendente da mesa: "+pontosTotalPrecisaMesa+"\n");
-					
-					while(m.getTurno().hasnext()){
-					Jogador jogador = m.getTurno().next();
-					
-					if(jogador instanceof Humano){
-						Humano hum = (Humano)jogador;
-						System.out.print("Mao: ");
-			    		for(Carta c : jogador.getMao())
-			    			System.out.print(c.toString()+", ");
-			    		
-			    		System.out.println("\nqual carta jogar?");
-		    			int carta = teclado.nextInt();
-		    			teclado.nextLine();
-		    		    m.getForcaDasCartas().CartaJogada(hum, hum.jogar(carta));
-					}else{
-						  CPU cpu = (CPU)jogador;
-						  Carta c = cpu.Jogar();
-						  System.out.println("Jogador: " + jogador.getNome()+" jogou "+c.toString());
-						  m.getForcaDasCartas().CartaJogada(cpu, c);
-					}
-					
-					
-					System.out.print("Mesa: ");
-					for(int x = 0; x < m.getMesa().length && m.getMesa()[x] != null;x++)System.out.print(m.getMesa()[x].toString()+", ");
-					System.out.println("");
-				 }
-					System.out.println("*********************************");
-					if(m.getForcaDasCartas().getJogadorFez() == null)System.out.println("Empachado");
-					else System.out.println("Jogador ganhou o turno: "+m.getForcaDasCartas().getJogadorFez().getNome());
-					
-					m.limpaMesa();
-				}
-				System.out.println("------------------------------------------");
-				System.out.println("Jogadores:");
-				for(Jogador jo : m.getJogadores()){
-					String caiu = (jo.getVidas()<=0)?" Caiu": "";
-					System.out.println(jo.getNome()+ " Vidas: "+jo.getVidas()+caiu);
-					}
-				
-		}while(m.fimDoJogo());
-		
-		System.out.println("Jogador Venceu: "+m.getGanhador().getNome());
-	}
-	
+        System.out.print("Digite seu nome: ");
+        String nome = scanner.nextLine();
+
+        Jogador j = new Humano(nome);
+        Mesa m = new Mesa(j);
+
+        Outrosjogadores outros = new Outrosjogadores();
+        outros.GeraOutrosJogadores(m, scanner);
+
+        do {
+            m.prints_nova_rodada(m);
+
+            int qtdJogadores = m.qtd_jogador();
+            for (int x = 0; x < qtdJogadores; x++) {
+                Jogador jogador = m.nextJogadoresVida();
+                if (m.getPartidas() == 0) {
+                    //printar todas as cartas dos outros e a sua
+                    List<Carta> carta_jogador = jogador.listagem();
+                    Carta carta = carta_jogador.get(0);
+                    if (jogador instanceof Humano) {
+                        teclado.primeira_rodada(jogador, scanner);
+                    } else {
+                        System.out.println(jogador.nome + " tem a carta: " + carta);
+                        //Carta[] c = {carta};
+                        //CartaASCII.exibirCartas(c);
+                    }
+                } else {
+                    if (jogador.getNome().equals(nome)) {
+                        m.MostrarMao(jogador);
+                        teclado.fazquantos(jogador, scanner);
+                    } else {
+                        CPU cpu = (CPU) jogador;
+                        cpu.escolherPontosPendentes(m.getNumerosCartas());
+                        System.out.println("jogador: " + jogador.getNome() + " Faz: " + jogador.getPontosPendente());
+                    }
+                }
+            }
+
+            m.ComecarPartida();
+            while (m.hasRodada()) {
+                System.out.println("*********************************");
+                System.out.println("Rodada: " + m.getRodada() + "/" + m.getRodadasPorPartidas());
+
+                System.out.println("\nJogadores Pontos:");
+                //int pontosTotalMesa = 0, pontosTotalPrecisaMesa = 0;
+                for (Jogador jo : m.getJogadores()) {
+                    //pontosTotalMesa += jo.getPontos();
+                    //pontosTotalPrecisaMesa += jo.getPontosPendente();
+                    System.out.println(jo.getNome() + " Pontos Feitos: " + jo.getPontos() + " Precisa fazer: " + jo.getPontosPendente());
+                }
+                System.out.println();
+                //System.out.println("Total de pontos da mesa: "+pontosTotalMesa+" Total de pontos pendente da mesa: "+pontosTotalPrecisaMesa+"\n");
+
+                while (m.getTurno().hasnext()) {
+                    Jogador jogador = m.getTurno().next();
+
+                    if (jogador instanceof Humano) {
+                        m.MostraMesa();
+                        m.MostrarMao(jogador);
+                        teclado.escolher_cartajogar(m, scanner, jogador);
+                    } else {
+                        CPU cpu = (CPU) jogador;
+                        Carta c = cpu.Jogar();
+                        System.out.println("Jogador: " + jogador.getNome() + " jogou " + c.toString());
+                        //Carta[] carta = {c};
+                        //CartaASCII.exibirCartas(carta);
+                        m.getForcaDasCartas().CartaJogada(cpu, c);
+                    }
+                }
+                System.out.println("*********************************");
+                if (m.getForcaDasCartas().getJogadorFez() == null) System.out.println("Empachado");
+                else
+                    System.out.println("Jogador " + m.getForcaDasCartas().getJogadorFez().getNome() + " ganhou o turno");
+
+                m.limpaMesa();
+            }
+            System.out.println("------------------------------------------");
+            System.out.println("Jogadores:");
+            for (Jogador jo : m.getJogadores()) {
+                String caiu = (jo.getVidas() <= 0) ? " Caiu" : "";
+                System.out.println(jo.getNome() + " Vidas: " + jo.getVidas() + caiu);
+            }
+        } while (m.fimDoJogo());
+
+        System.out.println("Jogador Venceu: " + m.getGanhador().getNome());
+        System.out.println("Deseja iniciar uma nova partida? (sim/nao)");
+        if (scanner.next().equalsIgnoreCase("sim")) reiniciar();
+        else scanner.close();
+    }
+
+    public static void reiniciar() {
+        // Chama a função main() novamente para reiniciar o jogo
+        System.out.println(System.lineSeparator().repeat(100));
+        main(new String[0]);
+    }
 }
