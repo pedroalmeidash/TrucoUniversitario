@@ -1,8 +1,5 @@
 package jun.truco.main;
 
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,6 +13,9 @@ public class Main {
 
         System.out.print("Digite seu nome: ");
         String nome = scanner.nextLine();
+
+        System.out.print("Deseja que as cartas sejam exibidas em ASCII? (sim/nao) ");
+        ASCIIBooleanHolder.setShowASCII(scanner.next().equalsIgnoreCase("sim"));
 
         Jogador j = new Humano(nome);
         Mesa m = new Mesa(j);
