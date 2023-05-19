@@ -280,7 +280,7 @@ public class Mesa {
         return forcaDasCartas;
     }
 
-    boolean valor = ASCIIBooleanHolder.isToShowASCII();
+    boolean isToShowASCII = ASCIIBooleanHolder.isToShowASCII();
 
     public void MostraMesa() {
         System.out.print("Mesa: ");
@@ -288,7 +288,7 @@ public class Mesa {
             System.out.print(getMesa()[x].toString() + ", ");
         System.out.println("");
 
-        if(valor) {
+        if(isToShowASCII) {
             CartaASCII.exibirCartas(mesa);
             System.out.println("");
         }
@@ -300,7 +300,7 @@ public class Mesa {
         System.out.println("");
         Carta[] mao = jogador.getMao().toArray(new Carta[0]);
 
-        if(valor) {
+        if(isToShowASCII) {
             CartaASCII.exibirCartas(mao);
             System.out.println("");
         }
