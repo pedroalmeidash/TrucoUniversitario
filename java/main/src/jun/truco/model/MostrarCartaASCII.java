@@ -1,8 +1,9 @@
 package jun.truco.model;
 
-public class CartaASCII {
+public class MostrarCartaASCII extends MostrarCarta {
 
-    public static void exibirCartas(Carta[] cartas) {
+    @Override
+    public void mostrarCartas(Carta[] cartas) {
         String[] linhas = new String[8];
         int countCard = 0;
         for (int i = 0; i < 8; i++) {
@@ -22,7 +23,8 @@ public class CartaASCII {
             }
             linhas[i] += "\n";
         }
-        System.out.print(String.join("", linhas));
+        System.out.println("");
+        System.out.println(String.join("", linhas));
     }
 
     public static String getLinha(int linha, Carta carta) {
@@ -41,17 +43,12 @@ public class CartaASCII {
     }
 
     public static String getNaipeSymbol(Carta carta) {
-        switch (carta.getNaipe()) {
-            case Paus:
-                return "♣";
-            case Ouros:
-                return "♦";
-            case Espadas:
-                return "♠";
-            case Copas:
-                return "♥";
-            default:
-                return "";
-        }
+        return switch (carta.getNaipe()) {
+            case Paus -> "♣";
+            case Ouros -> "♦";
+            case Espadas -> "♠";
+            case Copas -> "♥";
+            default -> "";
+        };
     }
 }

@@ -280,32 +280,6 @@ public class Mesa {
         return forcaDasCartas;
     }
 
-    boolean isToShowASCII = ASCIIBooleanHolder.isToShowASCII();
-
-    public void MostraMesa() {
-        System.out.print("Mesa: ");
-        for (int x = 0; x < getMesa().length && getMesa()[x] != null; x++)
-            System.out.print(getMesa()[x].toString() + ", ");
-        System.out.println("");
-
-        if(isToShowASCII) {
-            CartaASCII.exibirCartas(mesa);
-            System.out.println("");
-        }
-    }
-
-    public void MostrarMao(Jogador jogador) {
-        System.out.print("Mao: ");
-        for (Carta c : jogador.getMao()) System.out.print(c.toString() + ", ");
-        System.out.println("");
-        Carta[] mao = jogador.getMao().toArray(new Carta[0]);
-
-        if(isToShowASCII) {
-            CartaASCII.exibirCartas(mao);
-            System.out.println("");
-        }
-    }
-
     public void prints_nova_rodada(Mesa m) {
         System.out.println("------------------------------------------");
         System.out.println("Partida " + (m.getPartidas() + 1));
