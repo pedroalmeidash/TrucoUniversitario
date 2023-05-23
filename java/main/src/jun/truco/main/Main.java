@@ -14,8 +14,8 @@ public class Main {
         System.out.print("Digite seu nome: ");
         String nome = scanner.nextLine();
 
-        System.out.print("Deseja que as cartas sejam exibidas em ASCII? (sim/nao) ");
-        ASCIIBooleanHolder.setShowASCII(scanner.next().equalsIgnoreCase("sim"));
+        System.out.print("Deseja ver as cartas em ASCII? (sim/nao) ");
+        MostrarCarta.setShowASCII(scanner.next().equalsIgnoreCase("sim"));
 
         Jogador j = new Humano(nome);
         Mesa m = new Mesa(j);
@@ -37,12 +37,10 @@ public class Main {
                         teclado.primeira_rodada(jogador, scanner);
                     } else {
                         System.out.println(jogador.nome + " tem a carta: " + carta);
-                        //Carta[] c = {carta};
-                        //CartaASCII.exibirCartas(c);
                     }
                 } else {
                     if (jogador.getNome().equals(nome)) {
-                        m.MostrarMao(jogador);
+                        MostrarCarta.mostrarMao(jogador);
                         teclado.fazquantos(jogador, scanner);
                     } else {
                         CPU cpu = (CPU) jogador;
@@ -71,15 +69,13 @@ public class Main {
                     Jogador jogador = m.getTurno().next();
 
                     if (jogador instanceof Humano) {
-                        m.MostraMesa();
-                        m.MostrarMao(jogador);
+                        MostrarCarta.mostrarMesa(m);
+                        MostrarCarta.mostrarMao(jogador);
                         teclado.escolher_cartajogar(m, scanner, jogador);
                     } else {
                         CPU cpu = (CPU) jogador;
                         Carta c = cpu.Jogar();
                         System.out.println("Jogador: " + jogador.getNome() + " jogou " + c.toString());
-                        //Carta[] carta = {c};
-                        //CartaASCII.exibirCartas(carta);
                         m.getForcaDasCartas().CartaJogada(cpu, c);
                     }
                 }
