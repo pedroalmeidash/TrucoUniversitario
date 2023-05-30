@@ -29,26 +29,26 @@ public class MostrarCartaASCII extends MostrarCarta {
 
     public static String getLinha(int linha, Carta carta) {
         String valor = carta.getValor() == 0 ? "A" : (carta.getValor() == 7 ? "Q" : (carta.getValor() == 8 ? "J" : (carta.getValor() == 9 ? "K" : String.valueOf(carta.getValor() + 1))));
-        return switch (linha) {
-            case 0 -> "┌————————— ┐  ";
-            case 1 -> String.format("│%-2s        │  ", valor);
-            case 2 -> "│          │  ";
-            case 3 -> String.format("│   %s    │  ", getNaipeSymbol(carta));
-            case 4 -> "│          │  ";
-            case 5 -> "│          │  ";
-            case 6 -> String.format("│       %s  │  ", valor);
-            case 7 -> "└————————— ┘  ";
-            default -> "";
-        };
+        switch (linha) {
+            case 0: return "┌————————— ┐  ";
+            case 1: return String.format("│%-2s        │  ", valor);
+            case 2:
+            case 4:
+            case 5: return "│          │  ";
+            case 3: return String.format("│   %s    │  ", getNaipeSymbol(carta));
+            case 6: return String.format("│       %s  │  ", valor);
+            case 7: return "└————————— ┘  ";
+            default: return "";
+        }
     }
 
     public static String getNaipeSymbol(Carta carta) {
-        return switch (carta.getNaipe()) {
-            case Paus -> "♣";
-            case Ouros -> "♦";
-            case Espadas -> "♠";
-            case Copas -> "♥";
-            default -> "";
-        };
+        switch (carta.getNaipe()) {
+            case Paus: return "♣";
+            case Ouros: return "♦";
+            case Espadas: return "♠";
+            case Copas: return "♥";
+            default: return "";
+        }
     }
 }
