@@ -37,10 +37,10 @@ public class MostrarCartaASCII extends MostrarCarta {
     // TODO retornar cartas coloridas
     private String getNaipeSymbol(Carta carta) {
         switch (carta.getNaipe()) {
-            case Paus: return "♣";
-            case Ouros: return "♦";
-            case Espadas: return "♠";
-            case Copas: return "♥";
+            case PAUS: return "♣";
+            case OUROS: return "♦";
+            case ESPADAS: return "♠";
+            case COPAS: return "♥";
             default: return "";
         }
     }

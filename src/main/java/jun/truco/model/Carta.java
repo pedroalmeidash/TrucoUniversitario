@@ -3,13 +3,12 @@ package jun.truco.model;
 
 public class Carta {
 
-	public static enum Naipe {Paus, Ouros, Espadas, Copas}
+	public enum Naipe {PAUS, OUROS, ESPADAS, COPAS}
 
 	public static String Valor[] = {"A", "2", "3", "4", "5", "6", "7", "Q", "J", "K"};
 	private int valor;
 
 	private Naipe naipe;
-
 
 	public Carta(int valor, Naipe naipe) {
 		setValor(valor);
@@ -47,6 +46,7 @@ public class Carta {
 		this.naipe = naipe;
 	}
 
+	@Override
 	public String toString() {
 		return Valor[valor] + " de " + naipe;
 	}
