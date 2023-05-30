@@ -2,10 +2,6 @@ package jun.truco.model;
 
 public abstract class MostrarCarta {
 
-//    public static MostrarCarta getMostrador(boolean opcao) {
-//        return opcao ? new MostrarCartaASCII() : new MostrarCartaTexto();
-//    }
-
     private static boolean isToshowASCII;
 
     public static void setShowASCII(boolean opcao) {
@@ -26,5 +22,4 @@ public abstract class MostrarCarta {
     }
 
     public abstract void mostrarCartas(Carta[] cartas);
-
 }
