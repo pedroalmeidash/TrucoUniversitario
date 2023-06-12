@@ -1,6 +1,9 @@
-package jun.truco.model;
+package jun.truco.game;
 
-public class MostrarCartaASCII extends MostrarCarta {
+import jun.truco.game.CardDisplay;
+import jun.truco.model.Carta;
+
+public class ASCIICardDisplay extends CardDisplay {
 
     @Override
     public void mostrarCartas(Carta[] cartas) {

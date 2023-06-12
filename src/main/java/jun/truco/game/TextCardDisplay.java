@@ -1,6 +1,7 @@
-package jun.truco.model;
+package jun.truco.game;
 
-import main.CardDisplay;
+import jun.truco.game.CardDisplay;
+import jun.truco.model.Carta;
 
 public class TextCardDisplay extends CardDisplay {
 
