@@ -1,6 +1,8 @@
 package jun.truco.model;
 
-public class MostrarCartaTexto extends MostrarCarta {
+import main.CardDisplay;
+
+public class TextCardDisplay extends CardDisplay {
 
     @Override
     public void mostrarCartas(Carta[] cartas) {

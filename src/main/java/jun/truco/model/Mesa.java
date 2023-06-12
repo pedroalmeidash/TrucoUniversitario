@@ -1,6 +1,7 @@
 package jun.truco.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Mesa {
@@ -51,13 +52,11 @@ public class Mesa {
     }
 
     public void addJogador(Jogador... j) {
-        for (Jogador jogador : j)
-            jogadores.add(jogador);
+        jogadores.addAll(Arrays.asList(j));
 
         mesa = new Carta[jogadores.size()];
         turno = new Turno(factoryTurno(JogadorQueComecaPartida));
         calcMaximoNumeroDeCartas();
-
     }
 
 
@@ -280,20 +279,20 @@ public class Mesa {
         return forcaDasCartas;
     }
 
-    public void prints_nova_rodada(Mesa m) {
+    public void startRound() {
         System.out.println("------------------------------------------");
-        System.out.println("Partida " + (m.getPartidas() + 1));
+        System.out.println("Partida " + (getPartidas() + 1));
 
         Baralho b = new Baralho();
-        m.getJogadorDaVez().embaralhar(b);
+        getJogadorDaVez().embaralhar(b);
 
-        System.out.println("Jogador " + m.getJogadorDaVez().getNome() + " vai dar as cartas!");
-        m.DarAsCartas();
+        System.out.println("Jogador " + getJogadorDaVez().getNome() + " vai dar as cartas!");
+        DarAsCartas();
 
         b = new Baralho();
-        m.getJogadorDaVez().embaralhar(b);
-        m.vira(b.DarCarta());
+        getJogadorDaVez().embaralhar(b);
+        vira(b.DarCarta());
 
-        System.out.println("Manilha: " + m.getManilha());
+        System.out.println("Manilha: " + getManilha());
     }
 }

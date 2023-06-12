@@ -4,7 +4,6 @@ public class Humano extends Jogador {
 
     public Humano(String nome) {
         super(nome);
-
     }
 
     public Carta jogar(int posicao) {

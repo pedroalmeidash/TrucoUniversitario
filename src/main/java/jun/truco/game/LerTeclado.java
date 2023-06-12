@@ -1,10 +1,13 @@
-package jun.truco.model;
+package jun.truco.game;
 
 import jun.truco.main.Main;
+import jun.truco.model.Humano;
+import jun.truco.model.Jogador;
+import jun.truco.model.Mesa;
 
 import java.util.Scanner;
 
-public class Lerteclado {
+public class LerTeclado {
     public void primeira_rodada(Jogador j, Scanner scanner) {
         Boolean isValid = false;
         String resposta = "";
