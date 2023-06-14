@@ -114,7 +114,7 @@ public class ForcaDasCartas {
         return false;
     }
 
-    public void CartaJogada(Jogador j, Carta c) {
+    public void playCard(Jogador j, Carta c) {
 
         if (mesa[0] == null) {
             mesa[0] = c;

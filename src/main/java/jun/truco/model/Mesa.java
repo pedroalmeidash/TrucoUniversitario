@@ -75,9 +75,9 @@ public class Mesa {
 
     }
 
-    public Jogador nextJogadoresVida() {
-        if (turno.hasnext()) {
-            return turno.next();
+    public Jogador nextPlayer() {
+        if (turno.hasMoreTurns()) {
+            return turno.nextPlayerTurn();
         } else {
             int todosOsPontos = 0;
             for (Jogador j : turno.getJogador())
@@ -90,7 +90,7 @@ public class Mesa {
         }
     }
 
-    public Integer qtd_jogador() {
+    public Integer numberOfAlivePlayers() {
         return turno.getJogador().length;
     }
 
@@ -110,7 +110,7 @@ public class Mesa {
 
     }
 
-    public void ComecarPartida() {
+    public void startRound() {
         forcaDasCartas = new ForcaDasCartas(mesa, manilha);
     }
 
@@ -174,6 +174,10 @@ public class Mesa {
         return partidas;
     }
 
+    public boolean isFirstRound() {
+        return partidas == 0;
+    }
+
     private void zeraPontos() {
         for (Jogador j : jogadores) j.setPontos(0);
     }
@@ -207,10 +211,8 @@ public class Mesa {
         }
     }
 
-    public boolean fimDoJogo() {
-
-        if (jogadores.size() <= 1) return false;
-        else return true;
+    public boolean hasGameFinished() {
+        return jogadores.size() <= 1;
     }
 
     public Jogador getGanhador() {
@@ -279,7 +281,7 @@ public class Mesa {
         return forcaDasCartas;
     }
 
-    public void startRound() {
+    public void prepareRound() {
         System.out.println("------------------------------------------");
         System.out.println("Partida " + (getPartidas() + 1));
 

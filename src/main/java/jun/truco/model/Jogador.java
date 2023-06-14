@@ -73,4 +73,7 @@ public abstract class Jogador {
         this.pontosPendente = pontosPendente;
     }
 
+    public String getPointsMadeAndPendingPointsFormattedText() {
+        return getNome() + " Pontos Feitos: " + getPontos() + " Precisa fazer: " + getPontosPendente();
+    }
 }

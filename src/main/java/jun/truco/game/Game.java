@@ -2,12 +2,14 @@ package jun.truco.game;
 
 import jun.truco.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Game {
 
     private final Scanner scanner = new Scanner(System.in);
+    private final LerTeclado teclado = new LerTeclado();
     private CardDisplay cardDisplay;
     private Jogador mainPlayer;
     private List<Jogador> cpuPlayers;
@@ -17,83 +19,16 @@ public class Game {
         initPlayerConfigs();
         initMesa();
 
-        LerTeclado teclado = new LerTeclado();
-
         do {
+            mesa.prepareRound();
+            setPlayersWinningRounds();
             mesa.startRound();
+            playRound();
+            displayRoundResults();
+        } while (!mesa.hasGameFinished());
 
-            int qtdJogadores = mesa.qtd_jogador();
-            for (int x = 0; x < qtdJogadores; x++) {
-                Jogador jogador = mesa.nextJogadoresVida();
-                if (mesa.getPartidas() == 0) {
-                    //printar todas as cartas dos outros e a sua
-                    List<Carta> carta_jogador = jogador.listagem();
-                    Carta carta = carta_jogador.get(0);
-                    if (jogador instanceof Humano) {
-                        teclado.primeira_rodada(jogador, scanner);
-                    } else {
-                        System.out.println(jogador.nome + " tem a carta: " + carta);
-                    }
-                } else {
-                    if (jogador instanceof Humano) {
-                        cardDisplay.showHand(jogador);
-                        teclado.fazquantos(jogador, scanner);
-                    } else {
-                        CPU cpu = (CPU) jogador;
-                        cpu.escolherPontosPendentes(mesa.getNumerosCartas());
-                        System.out.println("jogador: " + jogador.getNome() + " Faz: " + jogador.getPontosPendente());
-                    }
-                }
-            }
-
-            mesa.ComecarPartida();
-            while (mesa.hasRodada()) {
-                System.out.println("*********************************");
-                System.out.println("Rodada: " + mesa.getRodada() + "/" + mesa.getRodadasPorPartidas());
-
-                System.out.println("\nJogadores Pontos:");
-                //int pontosTotalMesa = 0, pontosTotalPrecisaMesa = 0;
-                for (Jogador jo : mesa.getJogadores()) {
-                    //pontosTotalMesa += jo.getPontos();
-                    //pontosTotalPrecisaMesa += jo.getPontosPendente();
-                    System.out.println(jo.getNome() + " Pontos Feitos: " + jo.getPontos() + " Precisa fazer: " + jo.getPontosPendente());
-                }
-                System.out.println();
-                //System.out.println("Total de pontos da mesa: "+pontosTotalMesa+" Total de pontos pendente da mesa: "+pontosTotalPrecisaMesa+"\n");
-
-                while (mesa.getTurno().hasnext()) {
-                    Jogador jogador = mesa.getTurno().next();
-
-                    if (jogador instanceof Humano) {
-                        cardDisplay.showBoard(mesa);
-                        cardDisplay.showHand(jogador);
-                        teclado.escolher_cartajogar(mesa, scanner, jogador);
-                    } else {
-                        CPU cpu = (CPU) jogador;
-                        Carta c = cpu.Jogar();
-                        System.out.println("Jogador: " + jogador.getNome() + " jogou " + c.toString());
-                        mesa.getForcaDasCartas().CartaJogada(cpu, c);
-                    }
-                }
-                System.out.println("*********************************");
-                if (mesa.getForcaDasCartas().getJogadorFez() == null) System.out.println("Empachado");
-                else
-                    System.out.println("Jogador " + mesa.getForcaDasCartas().getJogadorFez().getNome() + " ganhou o turno");
-
-                mesa.limpaMesa();
-            }
-            System.out.println("------------------------------------------");
-            System.out.println("Jogadores:");
-            for (Jogador jo : mesa.getJogadores()) {
-                String caiu = (jo.getVidas() <= 0) ? " Caiu" : "";
-                System.out.println(jo.getNome() + " Vidas: " + jo.getVidas() + caiu);
-            }
-        } while (mesa.fimDoJogo());
-
-        System.out.println("Jogador Venceu: " + mesa.getGanhador().getNome());
-        System.out.println("Deseja iniciar uma nova partida? (sim/nao)");
-        if (scanner.next().equalsIgnoreCase("sim")) reiniciar();
-        else scanner.close();
+        displayGameResults();
+        scanner.close();
     }
 
     private void initPlayerConfigs() {
@@ -130,10 +65,94 @@ public class Game {
         });
     }
 
-    // TODO mover para a Main
-    private void reiniciar() {
-        // Chama a função main() novamente para reiniciar o jogo
-        System.out.println(System.lineSeparator().repeat(100));
-        start();
+    private void setPlayersWinningRounds() {
+        int numberOfAlivePlayers = mesa.numberOfAlivePlayers();
+        List<Jogador> roundPlayers = new ArrayList<>();
+
+        for (int x = 0; x < numberOfAlivePlayers; x++) {
+            roundPlayers.add(mesa.nextPlayer());
+        }
+
+        for (Jogador player : roundPlayers) {
+            if (player instanceof Humano) {
+                setMainPlayerWinningRounds(player);
+            } else if (player instanceof CPU) {
+                setCpuWinningRounds((CPU) player);
+            }
+        }
+    }
+
+    private void setMainPlayerWinningRounds(Jogador mainPlayer) {
+        if (mesa.isFirstRound()) {
+            teclado.primeira_rodada(mainPlayer, scanner);
+        } else {
+            cardDisplay.showHand(mainPlayer);
+            teclado.fazquantos(mainPlayer, scanner);
+        }
+    }
+
+    private void setCpuWinningRounds(CPU cpuPlayer) {
+        if (mesa.isFirstRound()) {
+            Carta card = cpuPlayer.listagem().get(0);
+            System.out.println(cpuPlayer.nome + " tem a carta: " + card);
+        } else {
+            cpuPlayer.escolherPontosPendentes(mesa.getNumerosCartas());
+            System.out.println("jogador: " + cpuPlayer.getNome() + " Faz: " + cpuPlayer.getPontosPendente());
+        }
+    }
+    
+    private void playRound() {
+        while (mesa.hasRodada()) {
+            displayPlayersRoundStats();
+            while (mesa.getTurno().hasMoreTurns()) {
+                playNextPlayerCard();
+            }
+            System.out.println("*********************************");
+            if (mesa.getForcaDasCartas().getJogadorFez() == null) System.out.println("Empachado");
+            else
+                System.out.println("Jogador " + mesa.getForcaDasCartas().getJogadorFez().getNome() + " ganhou o turno");
+
+            mesa.limpaMesa();
+        }
+    }
+
+    private void displayPlayersRoundStats() {
+        System.out.println("*********************************");
+        System.out.println("Rodada: " + mesa.getRodada() + "/" + mesa.getRodadasPorPartidas());
+
+        System.out.println();
+        System.out.println("Jogadores Pontos:");
+        for (Jogador player : mesa.getJogadores()) {
+            System.out.println(player.getPointsMadeAndPendingPointsFormattedText());
+        }
+        System.out.println();
+    }
+
+    private void playNextPlayerCard() {
+        Jogador jogador = mesa.getTurno().nextPlayerTurn();
+        if (jogador instanceof Humano) {
+            cardDisplay.showBoard(mesa);
+            cardDisplay.showHand(jogador);
+            teclado.chooseCardToPlay(mesa, scanner, jogador);
+        } else {
+            CPU cpu = (CPU) jogador;
+            Carta c = cpu.Jogar();
+            System.out.println("Jogador: " + jogador.getNome() + " jogou " + c.toString());
+            mesa.getForcaDasCartas().playCard(cpu, c);
+        }
+    }
+
+    private void displayRoundResults() {
+        System.out.println("------------------------------------------");
+        System.out.println("Jogadores:");
+        for (Jogador player : mesa.getJogadores()) {
+            String fell = (player.getVidas() <= 0) ? " Caiu" : "";
+            System.out.println(player.getNome() + " Vidas: " + player.getVidas() + fell);
+        }
+    }
+
+    private void displayGameResults() {
+        System.out.println("Jogador Venceu: " + mesa.getGanhador().getNome());
+        System.out.println("Deseja iniciar uma nova partida? (sim/nao)");
     }
 }

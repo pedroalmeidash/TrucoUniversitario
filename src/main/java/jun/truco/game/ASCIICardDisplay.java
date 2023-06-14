@@ -11,7 +11,6 @@ public class ASCIICardDisplay extends CardDisplay {
         for (int i = 0; i < 8; i++) {
             linhas[i] = "";
             for (Carta carta : cartas) {
-                // TODO carta não deve ser nula
                 if (carta != null) {
                     linhas[i] += getLinha(i, carta);
                 }
@@ -37,7 +36,6 @@ public class ASCIICardDisplay extends CardDisplay {
         }
     }
 
-    // TODO retornar cartas coloridas
     private String getNaipeSymbol(Carta carta) {
         switch (carta.getNaipe()) {
             case PAUS: return "♣";

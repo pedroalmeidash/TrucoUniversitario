@@ -20,14 +20,11 @@ public class Turno {
         return null;
     }
 
-    public boolean hasnext() {
-        if (posicao >= jogadores.length) {
-            return false;
-        }
-        return true;
+    public boolean hasMoreTurns() {
+        return posicao < jogadores.length;
     }
 
-    public Jogador next() {
+    public Jogador nextPlayerTurn() {
         if (posicao >= jogadores.length) return null;
         Jogador j = jogadores[posicao];
         posicao++;
