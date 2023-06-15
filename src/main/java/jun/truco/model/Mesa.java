@@ -9,11 +9,11 @@ public class Mesa {
     private int manilha;
     private Carta[] mesa;
     private int numerosCartas = 1;
-    private List<Jogador> jogadores = new ArrayList<Jogador>();
+    private int rodadasPorPartidas = 1;
+    private final List<Jogador> jogadores = new ArrayList<Jogador>();
     private Turno turno;
     private int JogadorQueComecaPartida = 0;
     private int partidas = 0;
-    private int rodadasPorPartidas = 1;
     private int rodada = 0;
     private int maximoDeNumerosDeCarta;
 
@@ -23,14 +23,8 @@ public class Mesa {
         return jogadores;
     }
 
-    public void setForcaDasCartas(ForcaDasCartas forcaDasCartas) {
-        this.forcaDasCartas = forcaDasCartas;
-    }
-
     public Mesa(Jogador... j) {
-
-        for (Jogador jogador : j)
-            jogadores.add(jogador);
+        jogadores.addAll(Arrays.asList(j));
 
         mesa = new Carta[jogadores.size()];
         turno = new Turno(factoryTurno(JogadorQueComecaPartida));
@@ -58,12 +52,6 @@ public class Mesa {
         turno = new Turno(factoryTurno(JogadorQueComecaPartida));
         calcMaximoNumeroDeCartas();
     }
-
-
-    public int NumerosJogadores() {
-        return jogadores.size();
-    }
-
 
     public void DarAsCartas() {
 
@@ -94,10 +82,6 @@ public class Mesa {
         return turno.getJogador().length;
     }
 
-    public void mostrar_todas_cartas() {
-        System.out.println("teste");
-    }
-
     public void vira(Carta c) {
         int valor = c.getValor();
         if (valor < 0 || valor > 9) throw new ArrayIndexOutOfBoundsException();
@@ -116,10 +100,6 @@ public class Mesa {
 
     public String getManilha() {
         return Carta.Valor[manilha];
-    }
-
-    public void setNumerosCartas(int numerosCartas) {
-        this.numerosCartas = numerosCartas;
     }
 
     public void calcMaximoNumeroDeCartas() {
@@ -220,35 +200,17 @@ public class Mesa {
         else return null;
     }
 
-    public void setPartidas(int partidas) {
-        this.partidas = partidas;
-    }
-
-
     public int getRodadasPorPartidas() {
         return rodadasPorPartidas;
     }
-
-
-    public void setRodadasPorPartidas(int rodadasPorPartidas) {
-        this.rodadasPorPartidas = rodadasPorPartidas;
-    }
-
 
     public int getRodada() {
         return rodada;
     }
 
-
-    public void setRodada(int rodada) {
-        this.rodada = rodada;
-    }
-
-
     public int getNumerosCartas() {
         return numerosCartas;
     }
-
 
     private Jogador[] factoryTurno(int posicao) {
         Jogador[] j = new Jogador[jogadores.size()];
@@ -274,9 +236,6 @@ public class Mesa {
         return turno;
     }
 
-    /**
-     * @return the forcaDasCartas
-     */
     public ForcaDasCartas getForcaDasCartas() {
         return forcaDasCartas;
     }

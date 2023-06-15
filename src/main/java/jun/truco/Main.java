@@ -12,13 +12,17 @@ public class Main {
         boolean keepPlaying;
         do {
             Game game = new Game();
-            game.start();
-            keepPlaying = playAgain();
+            Game.GameResult result = game.start();
+            if (result == Game.GameResult.RETREAT) {
+                keepPlaying = true;
+            } else {
+                keepPlaying = askPlayAgain();
+            }
             if (keepPlaying) clearTerminal();
         } while (keepPlaying);
     }
 
-    private static boolean playAgain() {
+    private static boolean askPlayAgain() {
         return scanner.next().equalsIgnoreCase("sim");
     }
 

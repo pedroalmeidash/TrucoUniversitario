@@ -1,6 +1,5 @@
-package jun.truco.game;
+package jun.truco.game.carddisplay;
 
-import jun.truco.game.CardDisplay;
 import jun.truco.model.Carta;
 
 public class ASCIICardDisplay extends CardDisplay {

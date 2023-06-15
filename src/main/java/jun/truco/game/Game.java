@@ -1,5 +1,6 @@
 package jun.truco.game;
 
+import jun.truco.game.carddisplay.CardDisplay;
 import jun.truco.model.*;
 
 import java.util.ArrayList;
@@ -9,60 +10,35 @@ import java.util.Scanner;
 public class Game {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final LerTeclado teclado = new LerTeclado();
+    private final PlayerActionReader playerActionReader = new PlayerActionReader(scanner);
     private CardDisplay cardDisplay;
-    private Jogador mainPlayer;
-    private List<Jogador> cpuPlayers;
     private Mesa mesa;
 
-    public void start() {
-        initPlayerConfigs();
-        initMesa();
-
-        do {
-            mesa.prepareRound();
-            setPlayersWinningRounds();
-            mesa.startRound();
-            playRound();
-            displayRoundResults();
-        } while (!mesa.hasGameFinished());
-
-        displayGameResults();
-        scanner.close();
+    public GameResult start() {
+        configGame();
+        GameResult gameResult;
+        try {
+            do {
+                mesa.prepareRound();
+                setPlayersWinningRounds();
+                mesa.startRound();
+                playRound();
+                displayRoundResults();
+            } while (!mesa.hasGameFinished());
+            gameResult = GameResult.FINISHED;
+            displayGameResults();
+        } catch (RetreatException re) {
+            gameResult = GameResult.RETREAT;
+        }
+        return gameResult;
     }
 
-    private void initPlayerConfigs() {
-        System.out.print("Digite seu nome: ");
-        String playerName = scanner.nextLine();
-        mainPlayer = new Humano(playerName);
-
-        System.out.print("Deseja ver as cartas em ASCII? (sim/nao) ");
-        Boolean showASCIIBoard = scanner.next().equalsIgnoreCase("sim");
-        cardDisplay = CardDisplayFactory.create(showASCIIBoard);
-
-        initCpuPlayers();
-    }
-
-    private void initCpuPlayers() {
-        System.out.print("Digite a quantindade de jogadores de 4 a 8: ");
-
-        int numberOfCpuPlayers;
-        do {
-            while (!scanner.hasNextInt()) scanner.next();
-            numberOfCpuPlayers = scanner.nextInt();
-        } while (numberOfCpuPlayers < 4 || numberOfCpuPlayers > 8);
-
-        PlayerGenerator playerGenerator = new PlayerGenerator();
-        cpuPlayers = playerGenerator.generatePlayers(numberOfCpuPlayers - 1);
-        scanner.nextLine();
-    }
-
-    private void initMesa() {
-        mesa = new Mesa(mainPlayer);
-        cpuPlayers.forEach(player -> {
-            if (player instanceof CPU) ((CPU) player).setMesa(mesa);
-            mesa.addJogador(player);
-        });
+    private void configGame() {
+        GameConfigurator gameConfigurator = new GameConfigurator(scanner);
+        gameConfigurator.configureGame();
+        GameConfiguration configuration = gameConfigurator.getGameConfiguration();
+        cardDisplay = configuration.getCardDisplay();
+        mesa = configuration.getMesa();
     }
 
     private void setPlayersWinningRounds() {
@@ -75,20 +51,16 @@ public class Game {
 
         for (Jogador player : roundPlayers) {
             if (player instanceof Humano) {
-                setMainPlayerWinningRounds(player);
+                setMainPlayerWinningRounds((Humano) player);
             } else if (player instanceof CPU) {
                 setCpuWinningRounds((CPU) player);
             }
         }
     }
 
-    private void setMainPlayerWinningRounds(Jogador mainPlayer) {
-        if (mesa.isFirstRound()) {
-            teclado.primeira_rodada(mainPlayer, scanner);
-        } else {
-            cardDisplay.showHand(mainPlayer);
-            teclado.fazquantos(mainPlayer, scanner);
-        }
+    private void setMainPlayerWinningRounds(Humano mainPlayer) {
+        cardDisplay.showHand(mainPlayer);
+        playerActionReader.readPlayerWinningTurnsForRound(mainPlayer);
     }
 
     private void setCpuWinningRounds(CPU cpuPlayer) {
@@ -100,8 +72,8 @@ public class Game {
             System.out.println("jogador: " + cpuPlayer.getNome() + " Faz: " + cpuPlayer.getPontosPendente());
         }
     }
-    
-    private void playRound() {
+
+    private void playRound() throws RetreatException {
         while (mesa.hasRodada()) {
             displayPlayersRoundStats();
             while (mesa.getTurno().hasMoreTurns()) {
@@ -128,12 +100,13 @@ public class Game {
         System.out.println();
     }
 
-    private void playNextPlayerCard() {
+    private void playNextPlayerCard() throws RetreatException {
         Jogador jogador = mesa.getTurno().nextPlayerTurn();
         if (jogador instanceof Humano) {
             cardDisplay.showBoard(mesa);
             cardDisplay.showHand(jogador);
-            teclado.chooseCardToPlay(mesa, scanner, jogador);
+            CardPlayDecision decision = playerActionReader.readPlayerCardToPlay(mesa, (Humano) jogador);
+            if (decision == CardPlayDecision.RETREAT) throw new RetreatException();
         } else {
             CPU cpu = (CPU) jogador;
             Carta c = cpu.Jogar();
@@ -154,5 +127,12 @@ public class Game {
     private void displayGameResults() {
         System.out.println("Jogador Venceu: " + mesa.getGanhador().getNome());
         System.out.println("Deseja iniciar uma nova partida? (sim/nao)");
+    }
+
+    private static class RetreatException extends Exception {
+    }
+
+    public enum GameResult {
+        FINISHED, RETREAT;
     }
 }

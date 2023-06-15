@@ -1,4 +1,4 @@
-package jun.truco.game;
+package jun.truco.game.carddisplay;
 
 public class CardDisplayFactory {
 

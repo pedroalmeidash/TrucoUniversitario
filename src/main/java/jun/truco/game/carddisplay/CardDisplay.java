@@ -1,4 +1,4 @@
-package jun.truco.game;
+package jun.truco.game.carddisplay;
 
 import jun.truco.model.Carta;
 import jun.truco.model.Jogador;
