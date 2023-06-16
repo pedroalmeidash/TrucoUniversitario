@@ -18,48 +18,69 @@ public class CPU extends Jogador {
         if (mao.size() == 1) return mao.remove(0);
         else {
             if (pontosPendente == 0) {
-                return ModoDescante();
+                return modoDescante();
             } else if (pontosPendente > pontos) {
                 return modoFazedor();
             } else {
-                return ModoDescante();
+                return modoDescante();
             }
 
         }
     }
 
-
-    private Carta ModoDescante() {
+    private Carta modoDescante() {
         if (m.getMesa()[0] != null) {
-
-            //Quando tem manilha na mesa
             if (vou.olharSeTemManilhaNaMesa()) {
-
-                int posicao = vou.posicaoDaManilhaNaMao();
-                if (posicao != -1) {
-                    if (vou.posicaoDeCartaNaMesa(mao.get(posicao)) > 0) return mao.remove(posicao);
-                } else {
-                    return mao.remove(vou.getPosicaoDaMaiorCartaNaMao());
-                }
+                return jogarManilha();
+            } else if (existeCartaQueEmpacha()) {
+                return jogarCartaQueEmpacha();
+            } else if (existeCartaNaMesa()) {
+                return jogarMenorCarta();
             }
-
-            //empache
-            for (int x = 0; x < mao.size(); x++) {
-                if (vou.CartaEmpacha(mao.get(x))) {
-                    return mao.remove(x);
-                }
-            }
-
-            //jogarMenorCarta
-            for (int x = 0; x < mao.size(); x++) {
-                if (vou.posicaoDeCartaNaMesa(mao.get(x)) > 0)
-                    return mao.remove(x);
-            }
-
-            return mao.remove(vou.getPosicaoDaMenorCartaNaMao());
-        } else {
-            return mao.remove(vou.getPosicaoDaMenorCartaNaMao());
         }
+
+        return jogarMenorCarta();
+    }
+
+    private Carta jogarManilha() {
+        int posicao = vou.posicaoDaManilhaNaMao();
+        if (posicao != -1 && vou.posicaoDeCartaNaMesa(mao.get(posicao)) > 0) {
+            return mao.remove(posicao);
+        } else {
+            return mao.remove(vou.getPosicaoDaMaiorCartaNaMao());
+        }
+    }
+
+    private boolean existeCartaQueEmpacha() {
+        for (Carta carta : mao) {
+            if (vou.CartaEmpacha(carta)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Carta jogarCartaQueEmpacha() {
+        for (int x = 0; x < mao.size(); x++) {
+            if (vou.CartaEmpacha(mao.get(x))) {
+                return mao.remove(x);
+            }
+        }
+        return null; // Retorna null caso não encontra uma carta que empacha
+    }
+
+    private boolean existeCartaNaMesa() {
+        for (Carta carta : mao) {
+            if (vou.posicaoDeCartaNaMesa(carta) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Carta jogarMenorCarta() {
+        int posicao = vou.getPosicaoDaMenorCartaNaMao();
+        return mao.remove(posicao);
     }
 
     private Carta modoFazedor() {
