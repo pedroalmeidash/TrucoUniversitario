@@ -26,11 +26,6 @@ public class Main {
         return scanner.next().equalsIgnoreCase("sim");
     }
 
-    public static void restart() {
-        clearTerminal();
-        main(new String[0]);
-    }
-
     private static void clearTerminal() {
         System.out.println(System.lineSeparator().repeat(100));
     }

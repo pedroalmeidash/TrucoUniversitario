@@ -33,7 +33,7 @@ public class CPU extends Jogador {
             if (vou.olharSeTemManilhaNaMesa()) {
                 return jogarManilha();
             } else if (existeCartaQueEmpacha()) {
-                return jogarCartaQueEmpacha();
+                return removerCartaQueEmpacha();
             } else if (existeCartaNaMesa()) {
                 return jogarMenorCarta();
             }
@@ -60,7 +60,7 @@ public class CPU extends Jogador {
         return false;
     }
 
-    private Carta jogarCartaQueEmpacha() {
+    private Carta removerCartaQueEmpacha() {
         for (int x = 0; x < mao.size(); x++) {
             if (vou.CartaEmpacha(mao.get(x))) {
                 return mao.remove(x);
