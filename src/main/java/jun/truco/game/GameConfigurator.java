@@ -31,8 +31,13 @@ public class GameConfigurator {
     }
 
     private Jogador configPlayer() {
-        System.out.print("Digite seu nome: ");
+        System.out.print("Digite seu nome para comecar o jogo ou digite tutorial para entender as regras: ");
         String playerName = scanner.nextLine();
+        if( playerName.equalsIgnoreCase("tutorial")){
+            System.out.print("\nO fodinha é um jogo que pode ser jogado com 4 a 8 jogadores. \n Cada jogador começa o jogo com 5 vidas e vai perdendo cada uma conforme erra o palpite nas rodadas. \n A cada rodada, a quantidade de cartas que cada jogador recebe vai aumentando. \n O objetivo do jogador é adivinhar quantas jogadas ele vai fazer na rodada. \n Se o jogador errar o palpite, perde vidas. \n Se o jogador acreditar que sua carta da rodada é maior que as outras, ele ganha a rodada. \n Se o jogador não tiver a maior carta, deve adivinhar quantas rodadas ele vai fazer. \n Na primeira partida, você não consegue ver a carta que você tem na mão. \n O baralho e o valor das cartas são semelhantes ao utilizado para jogar truco. Primeiro, uma pessoa embaralha as cartas e faz uma de vira, que é a manilha .\n Após isso, cada jogador precisa adivinhar quantas cartas vai fazer na rodada. \n Em seguida, todos os jogadores jogam uma carta, seguindo sempre a direita de quem embaralhou. \n Após todos jogarem, aparece o resultado de quem ganhou a rodada. Se empatar, o jogador que jogou na rodada anterior jogará novamente. \n Quem ganhar a rodada, inicia jogando a próxima. \n Quando todos os jogadores jogarem suas cartas em um determinado turno, a quantidade de vidas de cada um é atualizada. \n O jogador que ficar com a maior quantidade de vidas será o vencedor. \n\n");
+            System.out.print("Digite seu nome para comecar o jogo: ");
+            playerName = scanner.nextLine();
+        }
         return new Humano(playerName);
     }
 
